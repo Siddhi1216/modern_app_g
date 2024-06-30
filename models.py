@@ -9,6 +9,9 @@ class User(db.Model):
     passhash = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(64), nullable=True)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    carts = db.relationship('Cart', backref='user', lazy=True)
+    transactions = db.relationship('Transaction', backref='user', lazy=True)
+    orders = db.relationship('Order', backref='user', lazy=True)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,6 +45,7 @@ class Order(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
 
 with app.app_context():
     db.create_all()
